@@ -1,21 +1,7 @@
 {
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    // Default
-    "target": "es5",
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "skipLibCheck": true,
-    // Added
-    "jsx": "preserve",
-    "module": "ESNext",
-    "declaration": true,
-    "declarationDir": "types",
-    "sourceMap": true,
-    "moduleResolution": "node",
-    "allowSyntheticDefaultImports": true,
-    "emitDeclarationOnly": true,
-    "outDir": "dist",
+    "baseUrl": ".",
     "lib": [
       "dom",
       "dom.iterable",
@@ -25,8 +11,7 @@
     "noEmit": true,
     "incremental": true,
     "resolveJsonModule": true,
-    "isolatedModules": true,
-    "baseUrl": "."
+    "isolatedModules": true
   },
   "include": [
     "next-env.d.ts",

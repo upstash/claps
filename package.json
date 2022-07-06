@@ -6,8 +6,9 @@
   "module": "./claps.mjs",
   "types": "./claps.d.ts",
   "scripts": {
-    "build": "tsup && cp package.json ./dist/",
-    "dev": "next dev"
+    "dev": "next dev",
+    "build": "next build",
+    "build:npm": "tsup && cp package.json ./dist/"
   },
   "dependencies": {
     "@upstash/redis": "^1.7.0",
