@@ -1,0 +1,10 @@
+node_modules/
+example/
+src/
+.idea/
+.prettierignore
+*-lock.yaml
+*-lock.json
+vite*
+tsconfig.json
+index.html
