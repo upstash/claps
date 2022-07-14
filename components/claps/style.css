@@ -1,6 +1,7 @@
 .claps {
   --color-primary: #fff;
   --color-secondary: #000;
+  --clap-like: #ff718d;
 
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
@@ -12,31 +13,48 @@
 }
 
 .claps-button {
+  position: relative;
   user-select: none;
   box-sizing: border-box;
   margin: 0;
-  padding: 8px 14px;
+  padding: 10px 14px;
 
   display: flex;
   align-items: center;
+  gap: 0.4em;
 
   font: inherit;
   line-height: 1;
 
   color: var(--color-secondary);
   background-color: var(--color-primary);
-  border: 1px solid var(--color-secondary);
   border-radius: 999rem;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+
+  transition: 120ms;
 }
 
 .claps-button:disabled {
-  opacity: 0.5;
+  box-shadow: none;
 }
 
-.claps-value {
-  margin-left: 0.2em;
+.claps-button-cache,
+.claps-button:not(:disabled):hover {
+  transform: scale(1.05);
+}
+
+.claps-button-active svg {
+  color: var(--clap-like);
+  fill: currentColor;
 }
 
 .claps-value-suffix {
-  opacity: 0.5;
+  opacity: 0.4;
+}
+
+.claps-canvas {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
