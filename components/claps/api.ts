@@ -1,6 +1,6 @@
 import { Redis } from "@upstash/redis";
 import { NextApiRequest, NextApiResponse } from "next";
-import { MAX_CLAP_AT_ONE_TIME, MAX_POSSIBLE_CLAP } from "./claps";
+import { MAX_CLAP } from "./claps";
 import { createHash } from "crypto";
 
 export default function handler() {
@@ -16,32 +16,41 @@ export default function handler() {
 
     try {
       if (method === "GET") {
-        const score = await redis.zscore(KEY, HASH_IP);
-        return res.status(200).json({ score: score || 0 });
+        let score = 0;
+        let clapped = false;
+
+        const sortedList: Array<string | number> = await redis.zrange(
+          KEY,
+          0,
+          -1,
+          { withScores: true }
+        );
+
+        for (let i = 0; i < sortedList.length; i += 2) {
+          if (sortedList[i] === HASH_IP) {
+            clapped = true;
+          }
+          score = score + Number(sortedList[i + 1]);
+        }
+
+        return res.status(200).json({ score, clapped });
       }
 
       if (method === "PATCH") {
         let currentScore = await redis.zscore(KEY, HASH_IP);
+        let addScore = Number(score) || 0;
 
         if (currentScore === null) {
           currentScore = 0;
         }
 
-        if (currentScore && currentScore >= MAX_POSSIBLE_CLAP) {
+        if (currentScore && currentScore >= MAX_CLAP) {
           throw new Error("You have reached the maximum clap limit");
         }
 
-        let addScore = Number(score) || 0;
-
-        if (addScore > MAX_CLAP_AT_ONE_TIME) {
-          throw new Error(
-            "You can clap up to " + MAX_CLAP_AT_ONE_TIME + " times at once"
-          );
-        }
-
         // if the total value is higher than the max value, we need to remove some claps
-        if (currentScore + addScore > MAX_POSSIBLE_CLAP) {
-          addScore = addScore - (currentScore + addScore - MAX_POSSIBLE_CLAP);
+        if (currentScore + addScore > MAX_CLAP) {
+          addScore = addScore - (currentScore + addScore - MAX_CLAP);
         }
 
         const finalScore = await redis.zincrby(KEY, addScore, HASH_IP);

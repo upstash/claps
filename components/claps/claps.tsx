@@ -1,46 +1,19 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { debounce } from "lodash";
-// import Confetti from "react-dom-confetti";
+import cx from "classnames";
+import Svg from "./svg";
 
-const storageKey = "@upstash/claps";
-
-export type IClapsConfettiProps = {
-  angle?: number;
-  spread?: number;
-  width?: string;
-  height?: string;
-  duration?: number;
-  dragFriction?: number;
-  stagger?: number;
-  startVelocity?: number;
-  elementCount?: number;
-  decay?: number;
-  colors?: string[];
-  random?: () => number;
-};
-
-const config: IClapsConfettiProps = {
-  angle: 90,
-  spread: 50,
-  startVelocity: 16,
-  elementCount: 30,
-  dragFriction: 0.1,
-  duration: 1400,
-  stagger: 5,
-  width: "8px",
-  height: "8px",
-  colors: ["#a864fd", "#29cdff", "#78ff44", "#ff718d", "#fdff6a"],
-};
-
-export const MAX_CLAP_AT_ONE_TIME = 10;
-export const MAX_POSSIBLE_CLAP = 50;
+const STORAGE_KEY = "@upstash/claps";
+export const MAX_CLAP = 10000;
 
 export type IClapsProps = {
   key?: string;
   primaryColor?: string;
   secondaryColor?: string;
   clapColor?: string;
-  icon?: null | React.ReactElement;
+  iconClap?: null | React.ReactElement;
+  reply?: boolean;
+  iconReply?: null | React.ReactElement;
 };
 
 export default function Claps({
@@ -48,13 +21,15 @@ export default function Claps({
   primaryColor = "#fff",
   secondaryColor = "#000",
   clapColor = "#ff718d",
-  icon,
+  iconClap,
+  reply = true,
+  iconReply,
 }: IClapsProps) {
   const [ready, setReady] = useState(false);
-  const [clap, setClap] = useState(false);
-
-  const [count, setCount] = useState(0);
   const [cacheCount, setCacheCount] = useState(0);
+
+  const [clap, setClap] = useState(false);
+  const [count, setCount] = useState(0);
 
   const onClapSaving = useCallback(
     debounce(async (score) => {
@@ -85,13 +60,12 @@ export default function Claps({
   );
 
   const onLiked = () => {
-    localStorage.setItem(storageKey, JSON.stringify(true));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(true));
     setClap(true);
   };
 
   const onClap = () => {
-    const value =
-      cacheCount === MAX_CLAP_AT_ONE_TIME ? cacheCount : cacheCount + 1;
+    const value = cacheCount === MAX_CLAP ? cacheCount : cacheCount + 1;
     setCacheCount(value);
     return onClapSaving(value);
   };
@@ -103,6 +77,7 @@ export default function Claps({
       });
       const data = await response.json();
       setCount(data.score);
+      setClap(data.clapped);
     } catch (error) {
       console.log(error);
     } finally {
@@ -111,7 +86,7 @@ export default function Claps({
   };
 
   const checkUser = () => {
-    const like = localStorage.getItem(storageKey);
+    const like = localStorage.getItem(STORAGE_KEY);
     if (!like) return;
     setClap(true);
   };
@@ -123,7 +98,7 @@ export default function Claps({
 
   return (
     <div
-      className="claps"
+      className="claps-root"
       style={{
         // @ts-ignore
         "--color-primary": primaryColor,
@@ -132,47 +107,46 @@ export default function Claps({
       }}
     >
       <button
-        // disabled={!ready || clap}
-        className={
-          "claps-button" +
-          (cacheCount ? " claps-button-cache" : "") +
-          (clap ? " claps-button-active" : "")
-        }
-        onClick={onClap}
+        disabled={!ready}
         aria-label="Clap"
+        onClick={onClap}
+        className={cx(
+          "claps-button claps-button-clap",
+          cacheCount ? "claps-button-cache" : "",
+          clap ? "clapped" : ""
+        )}
       >
-        {icon === null ? null : icon ? (
-          icon
+        {iconClap === null ? null : iconClap ? (
+          iconClap
         ) : (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-label="Clap icon"
-          >
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-          </svg>
+          <Svg aria-label="Clap Icon">
+            <path d="M19.5 13.572l-7.5 7.428l-7.5 -7.428m0 0a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" />
+          </Svg>
         )}
 
-        {/*<span className="claps-canvas">
-          <Confetti config={config} active={Boolean(!cacheCount)} />
-        </span>*/}
-
         {ready && (
-          <span className="claps-value">
+          <span className="claps-button-text">
             {count}{" "}
             {cacheCount > 0 && (
-              <span className="claps-value-suffix">+ {cacheCount}</span>
+              <span className="claps-button-suffix">+ {cacheCount}</span>
             )}
           </span>
         )}
       </button>
+
+      <span className="claps-divider" />
+
+      {reply && (
+        <button className="claps-button claps-button-reply" aria-label="Reply">
+          {iconReply === null ? null : iconReply ? (
+            iconReply
+          ) : (
+            <Svg aria-label="Reply Icon">
+              <path d="M3 20l1.3 -3.9a9 8 0 1 1 3.4 2.9l-4.7 1" />
+            </Svg>
+          )}
+        </button>
+      )}
     </div>
   );
 }
