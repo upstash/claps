@@ -11,7 +11,7 @@ export type IClapsProps = {
   secondaryColor?: string;
   clapColor?: string;
   iconClap?: null | React.ReactElement;
-  reply?: boolean;
+  replyUrl?: string;
   iconReply?: null | React.ReactElement;
 };
 
@@ -21,7 +21,7 @@ export default function Claps({
   secondaryColor = "#000",
   clapColor = "#ff718d",
   iconClap,
-  reply = true,
+  replyUrl,
   iconReply,
 }: IClapsProps) {
   const API_URL = `/api/claps`;
@@ -124,18 +124,25 @@ export default function Claps({
         )}
       </button>
 
-      <span className="claps-divider" />
+      {replyUrl && (
+        <>
+          <span className="claps-divider" />
 
-      {reply && (
-        <button className="claps-button claps-button-reply" aria-label="Reply">
-          {iconReply === null ? null : iconReply ? (
-            iconReply
-          ) : (
-            <Svg aria-label="Reply Icon">
-              <path d="M3 20l1.3 -3.9a9 8 0 1 1 3.4 2.9l-4.7 1" />
-            </Svg>
-          )}
-        </button>
+          <a
+            href={replyUrl}
+            rel="noopener noreferrer"
+            target="_blank"
+            className="claps-button claps-button-reply"
+          >
+            {iconReply === null ? null : iconReply ? (
+              iconReply
+            ) : (
+              <Svg aria-label="Reply Icon">
+                <path d="M3 20l1.3 -3.9a9 8 0 1 1 3.4 2.9l-4.7 1" />
+              </Svg>
+            )}
+          </a>
+        </>
       )}
     </div>
   );
