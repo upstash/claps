@@ -15,9 +15,10 @@ export default function handler() {
 
     const HASH_IP = createHash("sha256").update(RAW_IP).digest("base64");
 
-    async function getTotalScore() {
+    async function getData() {
       let totalScore = 0,
-        userScore = 0;
+        userScore = 0,
+        totalUsers = 0;
 
       const sortedList: Array<string | number> = await redis.zrange(
         KEY,
@@ -34,19 +35,19 @@ export default function handler() {
         totalScore = totalScore + value;
       }
 
-      return { totalScore, userScore };
+      return { totalScore, userScore, totalUsers: sortedList.length / 2 };
     }
 
     try {
       if (method === "GET") {
-        const data = await getTotalScore();
+        const data = await getData();
         return res.status(200).json(data);
       }
 
       if (method === "PATCH") {
         let addScore = Number(score) || 0;
 
-        const { userScore } = await getTotalScore();
+        const { userScore } = await getData();
 
         if (userScore >= MAX_CLAP) {
           throw new Error("You have reached the maximum clap limit");
@@ -59,7 +60,7 @@ export default function handler() {
 
         await redis.zincrby(KEY, addScore, HASH_IP);
 
-        const data = await getTotalScore();
+        const data = await getData();
         return res.status(200).json(data);
       }
 

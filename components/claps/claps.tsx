@@ -28,8 +28,11 @@ export default function Claps({
   const [ready, setReady] = useState(false);
 
   const [cacheCount, setCacheCount] = useState(0);
-  const [userScore, setUserScore] = useState(0);
-  const [totalScore, setTotalScore] = useState(0);
+  const [data, setData] = useState({
+    totalScore: 0,
+    userScore: 0,
+    totalUsers: 0,
+  });
 
   const onClapSaving = useCallback(
     debounce(async (score) => {
@@ -45,8 +48,7 @@ export default function Claps({
         if (!response.ok) return;
 
         const data = await response.json();
-        setTotalScore(data.totalScore);
-        setUserScore(data.userScore);
+        setData(data);
       } catch (error) {
         console.error(error);
       } finally {
@@ -71,8 +73,7 @@ export default function Claps({
       if (!response.ok) return;
 
       const data = await response.json();
-      setTotalScore(data.totalScore);
-      setUserScore(data.userScore);
+      setData(data);
     } catch (error) {
       console.log(error);
     } finally {
@@ -96,12 +97,13 @@ export default function Claps({
     >
       <button
         disabled={!ready}
+        title={`${data.totalUsers} users clapped`}
         aria-label="Clap"
         onClick={onClap}
         className={cx(
           "claps-button claps-button-clap",
           cacheCount ? "claps-button-cache" : "",
-          userScore ? "clapped" : ""
+          data.userScore ? "clapped" : ""
         )}
       >
         {iconClap === null ? null : iconClap ? (
@@ -114,7 +116,7 @@ export default function Claps({
 
         {ready && (
           <span className="claps-button-text">
-            {totalScore}{" "}
+            {data.totalScore}{" "}
             {cacheCount > 0 && (
               <span className="claps-button-suffix">+ {cacheCount}</span>
             )}
