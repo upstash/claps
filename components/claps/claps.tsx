@@ -3,11 +3,10 @@ import { debounce } from "lodash";
 import cx from "classnames";
 import Svg from "./svg";
 
-const STORAGE_KEY = "@upstash/claps";
-export const MAX_CLAP = 10000;
+export const MAX_CLAP = 30;
 
 export type IClapsProps = {
-  key?: string;
+  url?: string;
   primaryColor?: string;
   secondaryColor?: string;
   clapColor?: string;
@@ -17,7 +16,7 @@ export type IClapsProps = {
 };
 
 export default function Claps({
-  key,
+  url,
   primaryColor = "#fff",
   secondaryColor = "#000",
   clapColor = "#ff718d",
@@ -25,31 +24,29 @@ export default function Claps({
   reply = true,
   iconReply,
 }: IClapsProps) {
+  const API_URL = `/api/claps`;
   const [ready, setReady] = useState(false);
-  const [cacheCount, setCacheCount] = useState(0);
 
-  const [clap, setClap] = useState(false);
-  const [count, setCount] = useState(0);
+  const [cacheCount, setCacheCount] = useState(0);
+  const [userScore, setUserScore] = useState(0);
+  const [totalScore, setTotalScore] = useState(0);
 
   const onClapSaving = useCallback(
     debounce(async (score) => {
       try {
-        const response = await fetch(`/api/claps/123`, {
+        const response = await fetch(API_URL, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ score, key }),
+          body: JSON.stringify({ score, url }),
         });
 
-        if (!response.ok) {
-          return;
-        }
+        if (!response.ok) return;
 
         const data = await response.json();
-
-        setCount(data.score);
-        onLiked();
+        setTotalScore(data.totalScore);
+        setUserScore(data.userScore);
       } catch (error) {
         console.error(error);
       } finally {
@@ -59,11 +56,6 @@ export default function Claps({
     []
   );
 
-  const onLiked = () => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(true));
-    setClap(true);
-  };
-
   const onClap = () => {
     const value = cacheCount === MAX_CLAP ? cacheCount : cacheCount + 1;
     setCacheCount(value);
@@ -72,12 +64,15 @@ export default function Claps({
 
   const getData = async () => {
     try {
-      const response = await fetch(`/api/claps/123`, {
+      const response = await fetch(API_URL, {
         method: "GET",
       });
+
+      if (!response.ok) return;
+
       const data = await response.json();
-      setCount(data.score);
-      setClap(data.clapped);
+      setTotalScore(data.totalScore);
+      setUserScore(data.userScore);
     } catch (error) {
       console.log(error);
     } finally {
@@ -85,14 +80,7 @@ export default function Claps({
     }
   };
 
-  const checkUser = () => {
-    const like = localStorage.getItem(STORAGE_KEY);
-    if (!like) return;
-    setClap(true);
-  };
-
   useEffect(() => {
-    // checkUser();
     getData();
   }, []);
 
@@ -113,7 +101,7 @@ export default function Claps({
         className={cx(
           "claps-button claps-button-clap",
           cacheCount ? "claps-button-cache" : "",
-          clap ? "clapped" : ""
+          userScore ? "clapped" : ""
         )}
       >
         {iconClap === null ? null : iconClap ? (
@@ -126,7 +114,7 @@ export default function Claps({
 
         {ready && (
           <span className="claps-button-text">
-            {count}{" "}
+            {totalScore}{" "}
             {cacheCount > 0 && (
               <span className="claps-button-suffix">+ {cacheCount}</span>
             )}

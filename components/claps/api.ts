@@ -9,52 +9,58 @@ export default function handler() {
   return async function (req: NextApiRequest, res: NextApiResponse) {
     const method = req.method;
     const { score, url } = req.body;
+
     const RAW_IP = getIP(req);
     const KEY = getKey(req, url);
 
     const HASH_IP = createHash("sha256").update(RAW_IP).digest("base64");
 
+    async function getTotalScore() {
+      let totalScore = 0,
+        userScore = 0;
+
+      const sortedList: Array<string | number> = await redis.zrange(
+        KEY,
+        0,
+        -1,
+        { withScores: true }
+      );
+
+      for (let i = 0; i < sortedList.length; i += 2) {
+        const [key, value] = [sortedList[i], Number(sortedList[i + 1])];
+
+        if (key === HASH_IP) userScore = value;
+
+        totalScore = totalScore + value;
+      }
+
+      return { totalScore, userScore };
+    }
+
     try {
       if (method === "GET") {
-        let score = 0;
-        let clapped = false;
-
-        const sortedList: Array<string | number> = await redis.zrange(
-          KEY,
-          0,
-          -1,
-          { withScores: true }
-        );
-
-        for (let i = 0; i < sortedList.length; i += 2) {
-          if (sortedList[i] === HASH_IP) {
-            clapped = true;
-          }
-          score = score + Number(sortedList[i + 1]);
-        }
-
-        return res.status(200).json({ score, clapped });
+        const data = await getTotalScore();
+        return res.status(200).json(data);
       }
 
       if (method === "PATCH") {
-        let currentScore = await redis.zscore(KEY, HASH_IP);
         let addScore = Number(score) || 0;
 
-        if (currentScore === null) {
-          currentScore = 0;
-        }
+        const { userScore } = await getTotalScore();
 
-        if (currentScore && currentScore >= MAX_CLAP) {
+        if (userScore >= MAX_CLAP) {
           throw new Error("You have reached the maximum clap limit");
         }
 
         // if the total value is higher than the max value, we need to remove some claps
-        if (currentScore + addScore > MAX_CLAP) {
-          addScore = addScore - (currentScore + addScore - MAX_CLAP);
+        if (userScore + addScore > MAX_CLAP) {
+          addScore = addScore - (userScore + addScore - MAX_CLAP);
         }
 
-        const finalScore = await redis.zincrby(KEY, addScore, HASH_IP);
-        return res.status(200).json({ score: finalScore });
+        await redis.zincrby(KEY, addScore, HASH_IP);
+
+        const data = await getTotalScore();
+        return res.status(200).json(data);
       }
 
       return res.status(405).json({ message: "Method not allowed" });
