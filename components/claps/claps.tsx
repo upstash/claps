@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { debounce } from "lodash";
-import Confetti from "react-dom-confetti";
+// import Confetti from "react-dom-confetti";
 
 const storageKey = "@upstash/claps";
 
@@ -160,9 +160,9 @@ export default function Claps({
           </svg>
         )}
 
-        <span className="claps-canvas">
+        {/*<span className="claps-canvas">
           <Confetti config={config} active={Boolean(!cacheCount)} />
-        </span>
+        </span>*/}
 
         {ready && (
           <span className="claps-value">
