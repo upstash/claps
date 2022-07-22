@@ -12,7 +12,7 @@ export default function handler() {
     const RAW_IP = getIP(req);
     const KEY = getKey(req, url);
 
-    const HASH_IP = createHash("sha256").update(RAW_IP).digest("hex");
+    const HASH_IP = createHash("sha256").update(RAW_IP).digest("base64");
 
     try {
       if (method === "GET") {
