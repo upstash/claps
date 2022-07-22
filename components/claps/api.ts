@@ -1,6 +1,7 @@
 import { Redis } from "@upstash/redis";
 import { NextApiRequest, NextApiResponse } from "next";
 import { MAX_CLAP_AT_ONE_TIME, MAX_POSSIBLE_CLAP } from "./claps";
+import { createHash } from "crypto";
 
 export default function handler() {
   const redis = Redis.fromEnv();
@@ -8,29 +9,42 @@ export default function handler() {
   return async function (req: NextApiRequest, res: NextApiResponse) {
     const method = req.method;
     const { score, url } = req.body;
-    const IP = getIP(req);
+    const RAW_IP = getIP(req);
     const KEY = getKey(req, url);
+
+    const HASH_IP = createHash("sha256").update(RAW_IP).digest("hex");
 
     try {
       if (method === "GET") {
-        const score = await redis.zscore(KEY, IP);
+        const score = await redis.zscore(KEY, HASH_IP);
         return res.status(200).json({ score: score || 0 });
       }
 
       if (method === "PATCH") {
-        const currentScore = await redis.zscore(KEY, IP);
+        let currentScore = await redis.zscore(KEY, HASH_IP);
+
+        if (currentScore === null) {
+          currentScore = 0;
+        }
 
         if (currentScore && currentScore >= MAX_POSSIBLE_CLAP) {
           throw new Error("You have reached the maximum clap limit");
         }
 
-        const addScore = Number(score) || 0;
+        let addScore = Number(score) || 0;
 
         if (addScore > MAX_CLAP_AT_ONE_TIME) {
-          throw new Error("You can clap at most once per minute");
+          throw new Error(
+            "You can clap up to " + MAX_CLAP_AT_ONE_TIME + " times at once"
+          );
         }
 
-        const finalScore = await redis.zincrby(KEY, addScore, IP);
+        // if the total value is higher than the max value, we need to remove some claps
+        if (currentScore + addScore > MAX_POSSIBLE_CLAP) {
+          addScore = addScore - (currentScore + addScore - MAX_POSSIBLE_CLAP);
+        }
+
+        const finalScore = await redis.zincrby(KEY, addScore, HASH_IP);
         return res.status(200).json({ score: finalScore });
       }
 
