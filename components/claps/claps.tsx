@@ -32,9 +32,11 @@ const config: IClapsConfettiProps = {
   colors: ["#a864fd", "#29cdff", "#78ff44", "#ff718d", "#fdff6a"],
 };
 
-export const MAX_CLAP = 10;
+export const MAX_CLAP_AT_ONE_TIME = 10;
+export const MAX_POSSIBLE_CLAP = 50;
 
 export type IClapsProps = {
+  key?: string;
   primaryColor?: string;
   secondaryColor?: string;
   clapColor?: string;
@@ -42,6 +44,7 @@ export type IClapsProps = {
 };
 
 export default function Claps({
+  key,
   primaryColor = "#fff",
   secondaryColor = "#000",
   clapColor = "#ff718d",
@@ -54,23 +57,28 @@ export default function Claps({
   const [cacheCount, setCacheCount] = useState(0);
 
   const onClapSaving = useCallback(
-    debounce(async (count) => {
+    debounce(async (score) => {
       try {
         const response = await fetch(`/api/claps/123`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ count }),
+          body: JSON.stringify({ score, key }),
         });
 
-        setCacheCount(0);
+        if (!response.ok) {
+          return;
+        }
+
         const data = await response.json();
 
-        setCount(data.count);
+        setCount(data.score);
         onLiked();
       } catch (error) {
         console.error(error);
+      } finally {
+        setCacheCount(0);
       }
     }, 1000),
     []
@@ -82,7 +90,8 @@ export default function Claps({
   };
 
   const onClap = () => {
-    const value = cacheCount === MAX_CLAP ? cacheCount : cacheCount + 1;
+    const value =
+      cacheCount === MAX_CLAP_AT_ONE_TIME ? cacheCount : cacheCount + 1;
     setCacheCount(value);
     return onClapSaving(value);
   };
@@ -93,7 +102,7 @@ export default function Claps({
         method: "GET",
       });
       const data = await response.json();
-      setCount(data.count);
+      setCount(data.score);
     } catch (error) {
       console.log(error);
     } finally {
@@ -108,7 +117,7 @@ export default function Claps({
   };
 
   useEffect(() => {
-    checkUser();
+    // checkUser();
     getData();
   }, []);
 
@@ -123,7 +132,7 @@ export default function Claps({
       }}
     >
       <button
-        disabled={!ready || clap}
+        // disabled={!ready || clap}
         className={
           "claps-button" +
           (cacheCount ? " claps-button-cache" : "") +
