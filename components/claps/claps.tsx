@@ -38,15 +38,18 @@ export default function Claps({
     totalUsers: 0,
   });
 
+  const setReactionAnim = (reaction: ReactionClass) => {
+    setReaction(reaction);
+    return setTimeout(() => {
+      setReaction(ReactionClass.default);
+    }, REACTION_DURATION);
+  };
+
   const onClapSaving = useCallback(
     debounce(async (score) => {
       try {
         if (data.userScore >= MAX_CLAP) {
-          setReaction(ReactionClass.no);
-          setTimeout(() => {
-            setReaction(ReactionClass.default);
-          }, REACTION_DURATION);
-          return;
+          return setReactionAnim(ReactionClass.no);
         }
 
         const response = await fetch(API_URL, {
@@ -57,15 +60,14 @@ export default function Claps({
           body: JSON.stringify({ score, key }),
         });
 
-        if (!response.ok) return;
+        if (!response.ok) {
+          return setReactionAnim(ReactionClass.no);
+        }
 
         const newData = await response.json();
         setData(newData);
 
-        setReaction(ReactionClass.yes);
-        setTimeout(() => {
-          setReaction(ReactionClass.default);
-        }, REACTION_DURATION);
+        setReactionAnim(ReactionClass.yes);
       } catch (error) {
         console.error(error);
       } finally {
