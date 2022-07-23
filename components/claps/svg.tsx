@@ -5,7 +5,7 @@ export interface ISVGProps extends React.SVGProps<SVGSVGElement> {
 }
 
 // https://tablericons.com/
-export default function Svg({ size = 20, children, ...props }: ISVGProps) {
+export default function Svg({ size = 21, children, ...props }: ISVGProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

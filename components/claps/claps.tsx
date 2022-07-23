@@ -13,20 +13,14 @@ enum ReactionClass {
 }
 
 export type IClapsProps = {
-  url?: string;
-  primaryColor?: string;
-  secondaryColor?: string;
-  clapColor?: string;
+  key?: string;
   iconClap?: null | React.ReactElement;
-  replyUrl?: string;
   iconReply?: null | React.ReactElement;
+  replyUrl?: string;
 };
 
 export default function Claps({
-  url,
-  primaryColor = "#fff",
-  secondaryColor = "#000",
-  clapColor = "#ff718d",
+  key,
   iconClap,
   replyUrl,
   iconReply,
@@ -38,11 +32,7 @@ export default function Claps({
     ReactionClass.default
   );
   const [cacheCount, setCacheCount] = useState(0);
-  const [data, setData] = useState<{
-    totalScore: number;
-    userScore: number;
-    totalUsers: number;
-  }>({
+  const [data, setData] = useState({
     totalScore: 0,
     userScore: 0,
     totalUsers: 0,
@@ -51,12 +41,20 @@ export default function Claps({
   const onClapSaving = useCallback(
     debounce(async (score) => {
       try {
+        if (data.userScore >= MAX_CLAP) {
+          setReaction(ReactionClass.no);
+          setTimeout(() => {
+            setReaction(ReactionClass.default);
+          }, REACTION_DURATION);
+          return;
+        }
+
         const response = await fetch(API_URL, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ score, url }),
+          body: JSON.stringify({ score, key }),
         });
 
         if (!response.ok) return;
@@ -78,14 +76,6 @@ export default function Claps({
   );
 
   const onClap = () => {
-    if (data.userScore >= MAX_CLAP) {
-      setReaction(ReactionClass.no);
-      setTimeout(() => {
-        setReaction(ReactionClass.default);
-      }, REACTION_DURATION);
-      return;
-    }
-
     const value = cacheCount === MAX_CLAP ? cacheCount : cacheCount + 1;
     setCacheCount(value);
 
@@ -118,9 +108,6 @@ export default function Claps({
       className={cx("claps-root animated", reaction)}
       style={{
         // @ts-ignore
-        "--color-primary": primaryColor,
-        "--color-secondary": secondaryColor,
-        "--clap-like": clapColor,
         "--animate-duration": `${REACTION_DURATION}ms`,
       }}
     >
@@ -135,10 +122,10 @@ export default function Claps({
           data.userScore ? "clapped" : ""
         )}
       >
-        {iconClap === null ? null : iconClap ? (
+        {iconClap ? (
           iconClap
         ) : (
-          <Svg aria-label="Clap Icon">
+          <Svg size={22} aria-label="Clap Icon">
             <path d="M19.5 13.572l-7.5 7.428l-7.5 -7.428m0 0a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" />
           </Svg>
         )}
@@ -163,7 +150,7 @@ export default function Claps({
             target="_blank"
             className="claps-button claps-button-reply"
           >
-            {iconReply === null ? null : iconReply ? (
+            {iconReply ? (
               iconReply
             ) : (
               <Svg aria-label="Reply Icon">

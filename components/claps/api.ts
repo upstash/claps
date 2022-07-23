@@ -8,10 +8,10 @@ export default function handler() {
 
   return async function (req: NextApiRequest, res: NextApiResponse) {
     const method = req.method;
-    const { score, url } = req.body;
+    const { score, key } = req.body;
 
     const RAW_IP = getIP(req);
-    const KEY = getKey(req, url);
+    const KEY = generateKey(req, key);
 
     const HASH_IP = createHash("sha256").update(RAW_IP).digest("base64");
 
@@ -76,11 +76,15 @@ export default function handler() {
   };
 }
 
-function getKey(req: NextApiRequest, url: string) {
-  const clientUrl = new URL(req.headers.referer!);
-  const clientClearUrl = clientUrl.origin + clientUrl.pathname;
+function generateKey(req: NextApiRequest, key: string) {
+  if (key) {
+    return `CLAP:${key}`;
+  }
 
-  return `CLAP:${url || clientClearUrl}`;
+  const referer = new URL(req.headers.referer as string);
+  const url = referer.origin + referer.pathname;
+
+  return `CLAP:${url}`;
 }
 
 function getIP(request: Request | NextApiRequest) {

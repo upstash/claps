@@ -1,7 +1,5 @@
 .claps-root {
-  --color-primary: #fff;
-  --color-secondary: #000;
-  --clap-like: #ff718d;
+  --clap-like: #ff3b61;
   --animate-duration: 600ms;
 
   -webkit-text-size-adjust: 100%;
@@ -13,10 +11,10 @@
   line-height: 1;
   padding: 2px;
   user-select: none;
-  color: var(--color-secondary);
-  background-color: var(--color-primary);
+  color: #000;
+  background-color: #fff;
   border-radius: 40px;
-  filter: drop-shadow(0 4px 3px rgb(0 0 0 / 0.05)) drop-shadow(0 2px 2px rgb(0 0 0 / 0.04));
+  filter: drop-shadow(0 4px 3px rgb(0 0 0 / 4%)) drop-shadow(0 2px 2px rgb(0 0 0 / 3%));
   display: flex;
   align-items: center;
 }
@@ -48,12 +46,7 @@
 }
 
 .claps-button:hover {
-  background-color: rgb(0 0 0 / 0.05);
-}
-
-.claps-button-clap.clapped svg {
-  color: var(--clap-like);
-  fill: currentColor;
+  background-color: rgb(0 0 0 / 5%);
 }
 
 .claps-button-suffix {
@@ -65,11 +58,23 @@
   display: block;
   width: 1px;
   height: 40%;
-  background-color: rgb(0 0 0 / 0.1);
+  background-color: rgb(0 0 0 / 10%);
 }
 
 .claps-root:hover .claps-divider {
   background-color: transparent;
+}
+
+.claps-button svg {
+  color: rgb(0 0 0 / 60%);
+}
+.claps-button:hover svg {
+  color: rgb(0 0 0 / 100%);
+}
+
+.claps-button-clap.clapped svg {
+  color: var(--clap-like);
+  fill: currentColor;
 }
 
 /* https://github.com/animate-css/animate.css */
@@ -80,29 +85,12 @@
 }
 
 @keyframes headShake {
-  0% {
-    transform: translateX(0);
-  }
-
-  6.5% {
-    transform: translateX(-6px) rotateY(-9deg);
-  }
-
-  18.5% {
-    transform: translateX(5px) rotateY(7deg);
-  }
-
-  31.5% {
-    transform: translateX(-3px) rotateY(-5deg);
-  }
-
-  43.5% {
-    transform: translateX(2px) rotateY(3deg);
-  }
-
-  50% {
-    transform: translateX(0);
-  }
+  0% { transform: translateX(0) }
+  6.5% { transform: translateX(-6px) rotateY(-9deg) }
+  18.5% { transform: translateX(5px) rotateY(7deg) }
+  31.5% { transform: translateX(-3px) rotateY(-5deg) }
+  43.5% { transform: translateX(2px) rotateY(3deg) }
+  50% { transform: translateX(0) }
 }
 
 .headShake {
@@ -111,25 +99,11 @@
 }
 
 @keyframes heartBeat {
-  0% {
-    transform: scale(1);
-  }
-
-  14% {
-    transform: scale(1.1);
-  }
-
-  28% {
-    transform: scale(1);
-  }
-
-  42% {
-    transform: scale(1.1);
-  }
-
-  70% {
-    transform: scale(1);
-  }
+  0% { transform: scale(1) }
+  14% { transform: scale(1.1) }
+  28% { transform: scale(1) }
+  42% { transform: scale(1.1) }
+  70% { transform: scale(1) }
 }
 
 .heartBeat {
