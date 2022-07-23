@@ -4,6 +4,13 @@ import cx from "classnames";
 import Svg from "./svg";
 
 export const MAX_CLAP = 30;
+export const REACTION_DURATION = 600;
+
+enum ReactionClass {
+  default = "",
+  no = "headShake",
+  yes = "heartBeat",
+}
 
 export type IClapsProps = {
   url?: string;
@@ -27,8 +34,15 @@ export default function Claps({
   const API_URL = `/api/claps`;
   const [ready, setReady] = useState(false);
 
+  const [reaction, setReaction] = useState<ReactionClass>(
+    ReactionClass.default
+  );
   const [cacheCount, setCacheCount] = useState(0);
-  const [data, setData] = useState({
+  const [data, setData] = useState<{
+    totalScore: number;
+    userScore: number;
+    totalUsers: number;
+  }>({
     totalScore: 0,
     userScore: 0,
     totalUsers: 0,
@@ -47,8 +61,13 @@ export default function Claps({
 
         if (!response.ok) return;
 
-        const data = await response.json();
-        setData(data);
+        const newData = await response.json();
+        setData(newData);
+
+        setReaction(ReactionClass.yes);
+        setTimeout(() => {
+          setReaction(ReactionClass.default);
+        }, REACTION_DURATION);
       } catch (error) {
         console.error(error);
       } finally {
@@ -59,8 +78,17 @@ export default function Claps({
   );
 
   const onClap = () => {
+    if (data.userScore >= MAX_CLAP) {
+      setReaction(ReactionClass.no);
+      setTimeout(() => {
+        setReaction(ReactionClass.default);
+      }, REACTION_DURATION);
+      return;
+    }
+
     const value = cacheCount === MAX_CLAP ? cacheCount : cacheCount + 1;
     setCacheCount(value);
+
     return onClapSaving(value);
   };
 
@@ -87,12 +115,13 @@ export default function Claps({
 
   return (
     <div
-      className="claps-root"
+      className={cx("claps-root animated", reaction)}
       style={{
         // @ts-ignore
         "--color-primary": primaryColor,
         "--color-secondary": secondaryColor,
         "--clap-like": clapColor,
+        "--animate-duration": `${REACTION_DURATION}ms`,
       }}
     >
       <button

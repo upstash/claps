@@ -17,8 +17,7 @@ export default function handler() {
 
     async function getData() {
       let totalScore = 0,
-        userScore = 0,
-        totalUsers = 0;
+        userScore = 0;
 
       const sortedList: Array<string | number> = await redis.zrange(
         KEY,
