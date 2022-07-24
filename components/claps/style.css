@@ -7,28 +7,64 @@
   text-rendering: optimizeLegibility;
   -moz-osx-font-smoothing: grayscale;
 
+  position: relative;
+  z-index: 1;
   font-size: 15px;
   line-height: 1;
-  padding: 2px;
   user-select: none;
-  color: #000;
-  background-color: #fff;
-  border-radius: 40px;
-  filter: drop-shadow(0 4px 3px rgb(0 0 0 / 4%)) drop-shadow(0 2px 2px rgb(0 0 0 / 3%));
-  display: flex;
-  align-items: center;
 }
 
 .claps-root * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.claps-fixed-left,
+.claps-fixed-center,
+.claps-fixed-right {
+  position: fixed;
+  bottom: 1rem;
+  z-index: 10;
+}
+
+.claps-fixed-left {
+  left: 1rem;
+}
+
+.claps-fixed-center {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.claps-fixed-right {
+  right: 1rem;
+}
+
+.claps-body {
+  display: flex;
+  align-items: center;
+  padding: 3px;
+  color: #000;
+  background-color: #fff;
+  border-radius: 40px;
+  filter: drop-shadow(0 4px 3px rgb(0 0 0 / 4%)) drop-shadow(0 2px 2px rgb(0 0 0 / 3%));
+}
+
+.claps-divider {
+  transition: 120ms;
+  display: block;
+  width: 1px;
+  margin-left: -1px;
+  height: 1.1em;
+  background-color: rgb(0 0 0 / 10%);
 }
 
 .claps-button {
-  margin: 0;
-  padding: 10px 14px;
+  padding: 10px 12px;
   display: flex;
   align-items: center;
-  gap: 0.2em;
+  gap: 0.3em;
   font: inherit;
   background-color: transparent;
   transition: 120ms;
@@ -53,21 +89,14 @@
   opacity: 0.4;
 }
 
-.claps-divider {
-  transition: 120ms;
-  display: block;
-  width: 1px;
-  height: 40%;
-  background-color: rgb(0 0 0 / 10%);
-}
-
-.claps-root:hover .claps-divider {
+.claps-body:hover .claps-divider {
   background-color: transparent;
 }
 
 .claps-button svg {
   color: rgb(0 0 0 / 60%);
 }
+
 .claps-button:hover svg {
   color: rgb(0 0 0 / 100%);
 }

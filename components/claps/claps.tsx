@@ -8,24 +8,27 @@ export const REACTION_DURATION = 600;
 
 enum ReactionClass {
   default = "",
-  no = "headShake",
-  yes = "heartBeat",
+  no = "headShake animated",
+  yes = "heartBeat animated",
 }
 
 export type IClapsProps = {
   key?: string;
+  fixed: "left" | "center" | "right";
+  replyUrl?: string;
+  apiPath: string;
   iconClap?: null | React.ReactElement;
   iconReply?: null | React.ReactElement;
-  replyUrl?: string;
 };
 
 export default function Claps({
   key,
-  iconClap,
+  fixed,
   replyUrl,
+  apiPath = `/api/claps`,
+  iconClap,
   iconReply,
 }: IClapsProps) {
-  const API_URL = `/api/claps`;
   const [ready, setReady] = useState(false);
 
   const [reaction, setReaction] = useState<ReactionClass>(
@@ -46,13 +49,13 @@ export default function Claps({
   };
 
   const onClapSaving = useCallback(
-    debounce(async (score) => {
+    debounce(async (score, data) => {
       try {
         if (data.userScore >= MAX_CLAP) {
           return setReactionAnim(ReactionClass.no);
         }
 
-        const response = await fetch(API_URL, {
+        const response = await fetch(apiPath, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
@@ -81,12 +84,12 @@ export default function Claps({
     const value = cacheCount === MAX_CLAP ? cacheCount : cacheCount + 1;
     setCacheCount(value);
 
-    return onClapSaving(value);
+    return onClapSaving(value, data);
   };
 
   const getData = async () => {
     try {
-      const response = await fetch(API_URL, {
+      const response = await fetch(apiPath, {
         method: "GET",
       });
 
@@ -107,61 +110,67 @@ export default function Claps({
 
   return (
     <div
-      className={cx("claps-root animated", reaction)}
+      className={cx("claps-root", fixed && `claps-fixed-${fixed}`)}
       style={{
         // @ts-ignore
         "--animate-duration": `${REACTION_DURATION}ms`,
       }}
     >
-      <button
-        disabled={!ready}
-        title={`${data.totalUsers} users clapped`}
-        aria-label="Clap"
-        onClick={onClap}
-        className={cx(
-          "claps-button claps-button-clap",
-          cacheCount ? "claps-button-cache" : "",
-          data.userScore ? "clapped" : ""
-        )}
-      >
-        {iconClap ? (
-          iconClap
-        ) : (
-          <Svg size={22} aria-label="Clap Icon">
-            <path d="M19.5 13.572l-7.5 7.428l-7.5 -7.428m0 0a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" />
-          </Svg>
-        )}
+      <div className={cx("claps-body", reaction)}>
+        <button
+          disabled={!ready}
+          title={`${data.totalUsers} users clapped`}
+          aria-label="Clap"
+          onClick={onClap}
+          className={cx(
+            "claps-button claps-button-clap",
+            cacheCount ? "claps-button-cache" : "",
+            data.userScore ? "clapped" : ""
+          )}
+        >
+          {iconClap ? (
+            iconClap
+          ) : (
+            <Svg
+              size={22}
+              aria-label="Clap Icon"
+              style={{ marginTop: "-.1em" }}
+            >
+              <path d="M19.5 13.572l-7.5 7.428l-7.5 -7.428m0 0a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" />
+            </Svg>
+          )}
 
-        {ready && (
-          <span className="claps-button-text">
-            {data.totalScore}{" "}
-            {cacheCount > 0 && (
-              <span className="claps-button-suffix">+ {cacheCount}</span>
-            )}
-          </span>
+          {ready && (
+            <span className="claps-button-text">
+              {data.totalScore}{" "}
+              {cacheCount > 0 && (
+                <span className="claps-button-suffix">+ {cacheCount}</span>
+              )}
+            </span>
+          )}
+        </button>
+
+        {replyUrl && (
+          <>
+            <span className="claps-divider" />
+
+            <a
+              href={replyUrl}
+              rel="noopener noreferrer"
+              target="_blank"
+              className="claps-button claps-button-reply"
+            >
+              {iconReply ? (
+                iconReply
+              ) : (
+                <Svg aria-label="Reply Icon">
+                  <path d="M3 20l1.3 -3.9a9 8 0 1 1 3.4 2.9l-4.7 1" />
+                </Svg>
+              )}
+            </a>
+          </>
         )}
-      </button>
-
-      {replyUrl && (
-        <>
-          <span className="claps-divider" />
-
-          <a
-            href={replyUrl}
-            rel="noopener noreferrer"
-            target="_blank"
-            className="claps-button claps-button-reply"
-          >
-            {iconReply ? (
-              iconReply
-            ) : (
-              <Svg aria-label="Reply Icon">
-                <path d="M3 20l1.3 -3.9a9 8 0 1 1 3.4 2.9l-4.7 1" />
-              </Svg>
-            )}
-          </a>
-        </>
-      )}
+      </div>
     </div>
   );
 }
