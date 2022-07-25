@@ -1,5 +1,5 @@
 import createClapsAPI from "components/claps/api";
 
-const ClapsAPI = createClapsAPI();
+const ClapsAPI = createClapsAPI({});
 
 export default ClapsAPI;

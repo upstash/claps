@@ -3,7 +3,6 @@ import { debounce } from "lodash";
 import cx from "classnames";
 import Svg from "./svg";
 
-export const MAX_CLAP = 30;
 export const REACTION_DURATION = 600;
 
 enum ReactionClass {
@@ -14,9 +13,10 @@ enum ReactionClass {
 
 export type IClapsProps = {
   key?: string;
-  fixed: "left" | "center" | "right";
+  fixed?: "left" | "center" | "right";
   replyUrl?: string;
-  apiPath: string;
+  replyCount?: number | string;
+  apiPath?: string;
   iconClap?: null | React.ReactElement;
   iconReply?: null | React.ReactElement;
 };
@@ -25,12 +25,12 @@ export default function Claps({
   key,
   fixed,
   replyUrl,
+  replyCount,
   apiPath = `/api/claps`,
   iconClap,
   iconReply,
 }: IClapsProps) {
   const [ready, setReady] = useState(false);
-
   const [reaction, setReaction] = useState<ReactionClass>(
     ReactionClass.default
   );
@@ -39,6 +39,7 @@ export default function Claps({
     totalScore: 0,
     userScore: 0,
     totalUsers: 0,
+    maxClaps: 0,
   });
 
   const setReactionAnim = (reaction: ReactionClass) => {
@@ -51,7 +52,7 @@ export default function Claps({
   const onClapSaving = useCallback(
     debounce(async (score, data) => {
       try {
-        if (data.userScore >= MAX_CLAP) {
+        if (data.userScore >= data.maxClaps) {
           return setReactionAnim(ReactionClass.no);
         }
 
@@ -81,7 +82,7 @@ export default function Claps({
   );
 
   const onClap = () => {
-    const value = cacheCount === MAX_CLAP ? cacheCount : cacheCount + 1;
+    const value = cacheCount === data.maxClaps ? cacheCount : cacheCount + 1;
     setCacheCount(value);
 
     return onClapSaving(value, data);
@@ -166,6 +167,9 @@ export default function Claps({
                 <Svg aria-label="Reply Icon">
                   <path d="M3 20l1.3 -3.9a9 8 0 1 1 3.4 2.9l-4.7 1" />
                 </Svg>
+              )}
+              {replyCount && (
+                <span className="claps-button-text">{replyCount}</span>
               )}
             </a>
           </>
