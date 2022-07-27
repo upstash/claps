@@ -73,7 +73,7 @@ The options can be passed as React props
 
 ```js
 // pages/api/claps.js
-import createClapsAPI from "components/claps/api";
+import createClapsAPI from "@upstash/claps/api";
 
 const ClapsAPI = createClapsAPI({
  // maxClaps: 10

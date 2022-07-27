@@ -13,12 +13,11 @@
   font-size: 15px;
   line-height: 1;
   user-select: none;
+  font-family: sans-serif;
 }
 
 .claps-root * {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
 }
 
 .claps-fixed {
@@ -64,6 +63,8 @@
 }
 
 .claps-button {
+  cursor: pointer;
+  border: 0;
   padding: 9px 12px;
   display: flex;
   align-items: center;
