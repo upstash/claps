@@ -113,7 +113,7 @@ export default function Claps({
 
   return (
     <div
-      className={cx("claps-root", fixed && `claps-fixed-${fixed}`)}
+      className={cx("claps-root", fixed && `claps-fixed claps-fixed-${fixed}`)}
       style={{
         // @ts-ignore
         "--animate-duration": `${REACTION_DURATION}ms`,
