@@ -3,7 +3,7 @@ import { debounce } from "lodash";
 import cx from "classnames";
 import Svg from "./svg";
 
-export const REACTION_DURATION = 600;
+const REACTION_DURATION = 600;
 
 enum ReactionClass {
   default = "",
@@ -11,11 +11,13 @@ enum ReactionClass {
   yes = "heartBeat animated",
 }
 
+export type IClapsFixedProps = undefined | "left" | "center" | "right";
+
 export type IClapsProps = {
   key?: string;
-  fixed?: "left" | "center" | "right";
-  replyUrl?: string;
-  replyCount?: number | string;
+  fixed?: IClapsFixedProps;
+  replyUrl?: undefined | string;
+  replyCount?: undefined | number | string;
   apiPath?: string;
   iconClap?: null | React.ReactElement;
   iconReply?: null | React.ReactElement;

@@ -4,6 +4,8 @@ import { createHash } from "crypto";
 
 const redis = Redis.fromEnv();
 
+export const MAX_CLAPS = 30;
+
 export function generateHash(ip: string) {
   return createHash("sha256").update(ip).digest("base64");
 }

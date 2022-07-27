@@ -1,10 +1,10 @@
 import { Redis } from "@upstash/redis";
 import { NextApiRequest, NextApiResponse } from "next";
-import { getData, generateKey, getIP, generateHash } from "./utils";
+import { getData, generateKey, getIP, generateHash, MAX_CLAPS } from "./utils";
 
 type OptionProps = { maxClaps?: number };
 
-export default function createClapsAPI({ maxClaps = 30 }: OptionProps) {
+export default function createClapsAPI({ maxClaps = MAX_CLAPS }: OptionProps) {
   const redis = Redis.fromEnv();
 
   return async function (req: NextApiRequest, res: NextApiResponse) {
