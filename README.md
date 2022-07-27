@@ -28,7 +28,7 @@ cp .env.local.example .env.local
 ### 3. Install Package
 
 ```bash
-yarn add @upstash/chatbox
+yarn add @upstash/claps
 ```
 
 ### 4. Import CSS

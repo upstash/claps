@@ -11,7 +11,7 @@ enum ReactionClass {
   yes = "heartBeat animated",
 }
 
-export type IClapsFixedProps = undefined | "left" | "center" | "right";
+type IClapsFixedProps = undefined | "left" | "center" | "right";
 
 export type IClapsProps = {
   key?: string;
