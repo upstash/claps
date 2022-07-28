@@ -26,7 +26,7 @@ export default function Home() {
             </a>
           </h1>
           <h4 className="mt-4 text-xl">
-            Adds clap button (like medium) to any page for your Next.js apps.
+            Add a claps button (like medium) to any page for your Next.js apps.
           </h4>
           <p className="mt-2 text-xl text-zinc-600">
             Nothing to maintain, it is completely serverless 💯

@@ -1,6 +1,6 @@
 # @upstash/claps
 
-Adds clap button (like medium) to any page for your Next.js apps.
+Add a claps button (like medium) to any page for your Next.js apps.
 
 Nothing to maintain, it is completely serverless 💯
 
