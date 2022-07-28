@@ -29,7 +29,7 @@ export default function Home() {
             Adds clap button (like medium) to any page for your Next.js apps.
           </h4>
           <p className="mt-2 text-xl text-zinc-600">
-            💯 Nothing to maintain, it is completely serverless.
+            Nothing to maintain, it is completely serverless 💯
           </p>
         </header>
 
@@ -92,7 +92,7 @@ export default function Home() {
           >
             GitHub README
           </a>{" "}
-          file for installation.
+          for the installation.
         </p>
 
         <hr className="my-12" />

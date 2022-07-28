@@ -2,7 +2,7 @@
 
 Adds clap button (like medium) to any page for your Next.js apps.
 
-💯 Nothing to maintain, it is completely serverless.
+Nothing to maintain, it is completely serverless 💯
 
 Check out [the demo](https://upstash-claps.vercel.app).
 
@@ -68,6 +68,9 @@ The options can be passed as React props
 | `apiPath?`    | `string`                    | `/api/claps` |
 | `iconClap?`   | `null, React.ReactElement`  |              |
 | `iconReply?`  | `null, React.ReactElement`  |              |
+
+> Url of the page is being used as the key/identity to keep the claps count. You
+> can override this giving the `key` attribute.
 
 ### 5. Create API
 
