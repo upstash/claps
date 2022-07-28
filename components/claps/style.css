@@ -1,5 +1,4 @@
 .claps-root {
-  --clap-like: #ff3b61;
   --animate-duration: 600ms;
 
   -webkit-text-size-adjust: 100%;
@@ -100,7 +99,7 @@
 }
 
 .claps-button svg {
-  color: rgb(0 0 0 / 50%);
+  color: rgb(0 0 0 / 80%);
 }
 
 .claps-button:hover svg {
@@ -108,8 +107,7 @@
 }
 
 .claps-button-clap.clapped svg {
-  color: var(--clap-like);
-  fill: currentColor;
+  color: rgb(0 0 0 / 100%);
 }
 
 /* https://github.com/animate-css/animate.css */
