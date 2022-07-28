@@ -134,8 +134,8 @@ export default function Claps({
             iconClap
           ) : (
             <svg
-              width="26"
-              height="26"
+              width="24"
+              height="24"
               viewBox="0 0 24 24"
               aria-label="clap"
               fill="currentColor"
