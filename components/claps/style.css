@@ -73,6 +73,8 @@
   background-color: transparent;
   transition: 120ms;
   border-radius: 10px;
+  text-decoration: none;
+  color: inherit;
 }
 
 .claps-button:first-child {
