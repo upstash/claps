@@ -7,7 +7,8 @@
   "types": "./claps.d.ts",
   "scripts": {
     "dev": "next dev",
-    "build": "tsup && cp package.json ./dist/"
+    "build": "next build",
+    "export": "tsup && cp package.json ./dist/"
   },
   "dependencies": {
     "@upstash/redis": "^1.7.0",
