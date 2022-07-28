@@ -139,8 +139,9 @@ export default function Claps({
               viewBox="0 0 24 24"
               aria-label="clap"
               fill="currentColor"
+              style={{ marginTop: -2 }}
             >
-              {!data.userScore ? (
+              {data.userScore ? (
                 <>
                   <path
                     fillRule="evenodd"
