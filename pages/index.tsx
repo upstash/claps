@@ -7,7 +7,7 @@ export default function Home() {
     "default"
   );
   const [replyUrl, setReplyUrl] = useState<string>(
-    "https://github.com/upstash/claps"
+    "https://twitter.com/upstash/status/1552694742558937088"
   );
 
   useEffect(() => {
