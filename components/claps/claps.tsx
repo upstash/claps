@@ -10,16 +10,16 @@ enum ReactionClass {
   yes = "heartBeat animated",
 }
 
-type IClapsFixedProps = undefined | "left" | "center" | "right";
+type IClapsFixedProps = "left" | "center" | "right";
 
 export type IClapsProps = {
   key?: string;
   fixed?: IClapsFixedProps;
-  replyUrl?: undefined | string;
-  replyCount?: undefined | number | string;
+  replyUrl?: string;
+  replyCount?: number | string;
   apiPath?: string;
-  iconClap?: null | React.ReactElement;
-  iconReply?: null | React.ReactElement;
+  iconClap?: React.ReactElement;
+  iconReply?: React.ReactElement;
 };
 
 export default function Claps({
