@@ -131,9 +131,7 @@ export default function Claps({
             clapped: data.userScore,
           })}
         >
-          {iconClap ? (
-            iconClap
-          ) : (
+          {iconClap || (
             <svg
               width="24"
               height="24"
@@ -185,9 +183,7 @@ export default function Claps({
               target="_blank"
               className="claps-button claps-button-reply"
             >
-              {iconReply ? (
-                iconReply
-              ) : (
+              {iconReply || (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
