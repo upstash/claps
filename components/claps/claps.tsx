@@ -112,7 +112,9 @@ export default function Claps({
 
   return (
     <div
-      className={cx("claps-root", fixed && `claps-fixed claps-fixed-${fixed}`)}
+      className={cx("claps-root", {
+        [`claps-fixed claps-fixed-${fixed}`]: fixed,
+      })}
       style={{
         // @ts-ignore
         "--animate-duration": `${REACTION_DURATION}ms`,
@@ -124,11 +126,10 @@ export default function Claps({
           title={`${data.totalUsers} users clapped`}
           aria-label="Clap"
           onClick={onClap}
-          className={cx(
-            "claps-button claps-button-clap",
-            cacheCount ? "claps-button-cache" : "",
-            data.userScore ? "clapped" : ""
-          )}
+          className={cx("claps-button claps-button-clap", {
+            "claps-button-cache": cacheCount,
+            clapped: data.userScore,
+          })}
         >
           {iconClap ? (
             iconClap
