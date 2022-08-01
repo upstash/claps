@@ -1,6 +1,6 @@
 {
   "name": "@upstash/claps",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "license": "MIT",
   "main": "./claps.js",
   "module": "./claps.mjs",
@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "export": "tsup && cp package.json ./dist/"
+    "export": "tsup && cp package.json README.md ./dist/"
   },
   "dependencies": {
     "@upstash/redis": "^1.7.0",
