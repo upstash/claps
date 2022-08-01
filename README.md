@@ -6,6 +6,10 @@ Nothing to maintain, it is completely serverless 💯
 
 Check out [the demo](https://upstash-claps.vercel.app).
 
+<a href="https://twitter.com/ademilter/status/1550595499048198144">
+<img width="600" src="https://github.com/upstash/claps/tree/master/public/ss.jpeg" />
+</a>
+
 ### 1. Create Database
 
 Create a free Redis database at [Upstash Console](https://console.upstash.com)
