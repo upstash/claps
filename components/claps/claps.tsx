@@ -10,16 +10,16 @@ enum ReactionClass {
   yes = "heartBeat animated",
 }
 
-type IClapsFixedProps = undefined | "left" | "center" | "right";
+type IClapsFixedProps = "left" | "center" | "right";
 
 export type IClapsProps = {
   key?: string;
   fixed?: IClapsFixedProps;
-  replyUrl?: undefined | string;
-  replyCount?: undefined | number | string;
+  replyUrl?: string;
+  replyCount?: number | string;
   apiPath?: string;
-  iconClap?: null | React.ReactElement;
-  iconReply?: null | React.ReactElement;
+  iconClap?: React.ReactElement;
+  iconReply?: React.ReactElement;
 };
 
 export default function Claps({
@@ -112,7 +112,9 @@ export default function Claps({
 
   return (
     <div
-      className={cx("claps-root", fixed && `claps-fixed claps-fixed-${fixed}`)}
+      className={cx("claps-root", {
+        [`claps-fixed claps-fixed-${fixed}`]: fixed,
+      })}
       style={{
         // @ts-ignore
         "--animate-duration": `${REACTION_DURATION}ms`,
@@ -124,15 +126,12 @@ export default function Claps({
           title={`${data.totalUsers} users clapped`}
           aria-label="Clap"
           onClick={onClap}
-          className={cx(
-            "claps-button claps-button-clap",
-            cacheCount ? "claps-button-cache" : "",
-            data.userScore ? "clapped" : ""
-          )}
+          className={cx("claps-button claps-button-clap", {
+            "claps-button-cache": cacheCount,
+            clapped: data.userScore,
+          })}
         >
-          {iconClap ? (
-            iconClap
-          ) : (
+          {iconClap || (
             <svg
               width="24"
               height="24"
@@ -184,9 +183,7 @@ export default function Claps({
               target="_blank"
               className="claps-button claps-button-reply"
             >
-              {iconReply ? (
-                iconReply
-              ) : (
+              {iconReply || (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
