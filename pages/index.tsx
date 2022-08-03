@@ -47,7 +47,7 @@ export default function Home() {
             <tr>
               <td className="p-2">fixed:</td>
               <td className="p-2">
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   {["default", "left", "center", "right"].map((value) => (
                     <label
                       key={value}
