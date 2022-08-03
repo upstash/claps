@@ -18,7 +18,7 @@ export default function createClapsAPI({ maxClaps = MAX_CLAPS }: OptionProps) {
     try {
       if (method === "GET") {
         const data = await getData(KEY, HASH_IP);
-        return res.status(200).json(data);
+        return res.status(200).json({ ...data, maxClaps });
       }
 
       if (method === "PATCH") {
@@ -38,7 +38,7 @@ export default function createClapsAPI({ maxClaps = MAX_CLAPS }: OptionProps) {
         await redis.zincrby(KEY, addScore, HASH_IP);
 
         const data = await getData(KEY, HASH_IP);
-        return res.status(200).json(data);
+        return res.status(200).json({ ...data, maxClaps });
       }
 
       return res.status(405).json({ message: "Method not allowed" });
