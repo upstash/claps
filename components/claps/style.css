@@ -21,6 +21,14 @@
   transition: var(--transition);
 }
 
+.claps-body {
+  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 10%));
+}
+
+.claps-body.claps-fixed {
+  filter: drop-shadow(0 4px 8px rgb(0 0 0 / 14%)) drop-shadow(0 1px 2px rgb(0 0 0 / 6%));
+}
+
 .claps-fixed {
   position: fixed;
   bottom: 1rem;
@@ -33,14 +41,14 @@
 
 .claps-fixed-center {
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateZ(0);
 }
 
 .claps-fixed-right {
   right: 1rem;
 }
 
-.claps-body {
+.claps-buttons {
   display: flex;
   align-items: center;
   gap: 1px;
@@ -48,11 +56,6 @@
   color: #000;
   background-color: #fff;
   border-radius: 40px;
-  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 10%));
-}
-
-.claps-fixed .claps-body {
-  filter: drop-shadow(0 4px 8px rgb(0 0 0 / 14%)) drop-shadow(0 1px 2px rgb(0 0 0 / 6%));
 }
 
 .claps-divider {

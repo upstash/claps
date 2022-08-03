@@ -123,9 +123,7 @@ export default function Claps({
 
   return (
     <div
-      className={cx("claps-root", {
-        [`claps-fixed claps-fixed-${fixed}`]: fixed,
-      })}
+      className="claps-root"
       style={{
         // @ts-ignore
         "--animate-duration": `${REACTION_DURATION}ms`,
@@ -134,78 +132,84 @@ export default function Claps({
       <Icons />
       {showShare && <Share onClose={() => setShowShare(false)} />}
 
-      <div className={cx("claps-body", reaction)}>
-        <button
-          disabled={!ready}
-          title={`${data.totalUsers} users clapped`}
-          aria-label="Clap"
-          onClick={onClap}
-          className={cx("claps-button claps-button-clap", {
-            "claps-button-cache": cacheCount,
-            clapped: data.userScore,
-          })}
-        >
-          {iconClap || (
-            <svg
-              width="24"
-              height="24"
-              aria-label="clap"
-              style={{ marginTop: -2 }}
-            >
-              {data.userScore ? (
-                <use href="#icon-claps-fill" />
-              ) : (
-                <use href="#icon-claps" />
-              )}
-            </svg>
-          )}
-
-          {ready && (
-            <span className="claps-button-text">
-              {data.totalScore + cacheCount}
-            </span>
-          )}
-        </button>
-
-        {replyUrl && (
-          <>
-            <span className="claps-divider" />
-
-            <a
-              href={replyUrl}
-              rel="noopener noreferrer"
-              target="_blank"
-              className="claps-button claps-button-reply"
-            >
-              {iconReply || (
-                <svg width="22" height="22" aria-label="reply">
-                  <use href="#icon-reply" />
-                </svg>
-              )}
-              {replyCount && (
-                <span className="claps-button-text">{replyCount}</span>
-              )}
-            </a>
-          </>
-        )}
-
-        {shareButton && (
-          <>
-            <span className="claps-divider" />
-
-            <button
-              type="button"
-              className="claps-button"
-              onClick={() => {
-                setShowShare(true);
-              }}
-            >
-              <svg width="20" height="20" aria-label="share">
-                <use href="#icon-dots" />
+      <div
+        className={cx("claps-body", {
+          [`claps-fixed claps-fixed-${fixed}`]: fixed,
+        })}
+      >
+        <div className={cx("claps-buttons", reaction)}>
+          <button
+            disabled={!ready}
+            title={`${data.totalUsers} users clapped`}
+            aria-label="Clap"
+            onClick={onClap}
+            className={cx("claps-button claps-button-clap", {
+              "claps-button-cache": cacheCount,
+              clapped: data.userScore,
+            })}
+          >
+            {iconClap || (
+              <svg
+                width="24"
+                height="24"
+                aria-label="clap"
+                style={{ marginTop: -2 }}
+              >
+                {data.userScore ? (
+                  <use href="#icon-claps-fill" />
+                ) : (
+                  <use href="#icon-claps" />
+                )}
               </svg>
-            </button>
-          </>
-        )}
+            )}
+
+            {ready && (
+              <span className="claps-button-text">
+                {data.totalScore + cacheCount}
+              </span>
+            )}
+          </button>
+
+          {replyUrl && (
+            <>
+              <span className="claps-divider" />
+
+              <a
+                href={replyUrl}
+                rel="noopener noreferrer"
+                target="_blank"
+                className="claps-button claps-button-reply"
+              >
+                {iconReply || (
+                  <svg width="22" height="22" aria-label="reply">
+                    <use href="#icon-reply" />
+                  </svg>
+                )}
+                {replyCount && (
+                  <span className="claps-button-text">{replyCount}</span>
+                )}
+              </a>
+            </>
+          )}
+
+          {shareButton && (
+            <>
+              <span className="claps-divider" />
+
+              <button
+                type="button"
+                className="claps-button"
+                onClick={() => {
+                  setShowShare(true);
+                }}
+              >
+                <svg width="20" height="20" aria-label="share">
+                  <use href="#icon-dots" />
+                </svg>
+              </button>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
