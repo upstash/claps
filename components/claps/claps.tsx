@@ -165,10 +165,7 @@ export default function Claps({
 
           {ready && (
             <span className="claps-button-text">
-              {data.totalScore}{" "}
-              {cacheCount > 0 && (
-                <span className="claps-button-suffix">+ {cacheCount}</span>
-              )}
+              {data.totalScore + cacheCount}
             </span>
           )}
         </button>
