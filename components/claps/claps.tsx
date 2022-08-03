@@ -155,7 +155,7 @@ export default function Claps({
                 aria-label="clap"
                 style={{ marginTop: -1 }}
               >
-                {!data.userScore ? (
+                {data.userScore ? (
                   <use href="#icon-claps-fill" />
                 ) : (
                   <use href="#icon-claps" />
