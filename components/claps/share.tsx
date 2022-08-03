@@ -38,7 +38,7 @@ export default function Share({
           <h3>Share this page</h3>
 
           <button type="button" className="claps-share-close" onClick={onClose}>
-            <svg width="20" height="20" aria-label="cancel">
+            <svg width="22" height="22" aria-label="cancel">
               <use href="#icon-x" />
             </svg>
           </button>

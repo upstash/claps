@@ -93,24 +93,16 @@
   background-color: rgb(0 0 0 / 5%);
 }
 
-.claps-button-suffix {
-  opacity: 0.4;
-}
-
 .claps-body:hover .claps-divider {
   background-color: transparent;
 }
 
 .claps-button svg {
-  color: rgb(0 0 0 / 80%);
+  opacity: .8;
 }
 
 .claps-button:hover svg {
-  color: rgb(0 0 0 / 100%);
-}
-
-.claps-button-clap.clapped svg {
-  color: rgb(0 0 0 / 100%);
+  opacity: 1;
 }
 
 .claps-share-modal {
@@ -160,7 +152,7 @@
 }
 
 .claps-share-button-icon {
-  padding: .6rem;
+  padding: .7rem;
   background-color: rgb(0 0 0 / 6%);
   border-radius: 100%;
 }

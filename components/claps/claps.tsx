@@ -150,12 +150,12 @@ export default function Claps({
           >
             {iconClap || (
               <svg
-                width="24"
-                height="24"
+                width="26"
+                height="26"
                 aria-label="clap"
-                style={{ marginTop: -2 }}
+                style={{ marginTop: -1 }}
               >
-                {data.userScore ? (
+                {!data.userScore ? (
                   <use href="#icon-claps-fill" />
                 ) : (
                   <use href="#icon-claps" />

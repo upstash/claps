@@ -30,7 +30,7 @@ export default function Icons() {
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          strokeWidth="1.5"
+          strokeWidth="1.2"
           strokeLinecap="round"
           strokeLinejoin="round"
         >
@@ -42,7 +42,7 @@ export default function Icons() {
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          strokeWidth="1.5"
+          strokeWidth="1.2"
           strokeLinecap="round"
           strokeLinejoin="round"
         >
@@ -56,7 +56,7 @@ export default function Icons() {
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          strokeWidth="1.3"
+          strokeWidth="1.2"
           strokeLinecap="round"
           strokeLinejoin="round"
         >
@@ -69,7 +69,7 @@ export default function Icons() {
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          strokeWidth="1.3"
+          strokeWidth="1.2"
           strokeLinecap="round"
           strokeLinejoin="round"
         >
@@ -81,7 +81,7 @@ export default function Icons() {
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          strokeWidth="1.3"
+          strokeWidth="1.2"
           strokeLinecap="round"
           strokeLinejoin="round"
         >
@@ -94,7 +94,7 @@ export default function Icons() {
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          strokeWidth="1.5"
+          strokeWidth="1.2"
           strokeLinecap="round"
           strokeLinejoin="round"
         >
