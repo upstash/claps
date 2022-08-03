@@ -63,15 +63,16 @@ export default function Example() {
 
 The options can be passed as React props
 
-| key           | type                        | default      |
-| ------------- | --------------------------- | ------------ |
-| `key?`        | `string`                    |              |
-| `fixed?`      | `"left", "center", "right"` |              |
-| `replyUrl?`   | `string`                    |              |
-| `replyCount?` | `string`                    |              |
-| `apiPath?`    | `string`                    | `/api/claps` |
-| `iconClap?`   | `null, React.ReactElement`  |              |
-| `iconReply?`  | `null, React.ReactElement`  |              |
+| key            | type                        | default      |
+| -------------- | --------------------------- | ------------ |
+| `key?`         | `string`                    |              |
+| `fixed?`       | `"left", "center", "right"` |              |
+| `replyUrl?`    | `string`                    |              |
+| `replyCount?`  | `string`                    |              |
+| `apiPath?`     | `string`                    | `/api/claps` |
+| `iconClap?`    | `null, React.ReactElement`  |              |
+| `iconReply?`   | `null, React.ReactElement`  |              |
+| `shareButton?` | `boolean`                   | `true`       |
 
 > Url of the page is being used as the key/identity to keep the claps count. You
 > can override this giving the `key` attribute.
@@ -83,7 +84,7 @@ The options can be passed as React props
 import createClapsAPI from "@upstash/claps/api";
 
 const ClapsAPI = createClapsAPI({
- // maxClaps: 10
+  // maxClaps: 10
 });
 export default ClapsAPI;
 ```

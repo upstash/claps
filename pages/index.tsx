@@ -37,7 +37,6 @@ export default function Home() {
           <Claps
             fixed={fixed === "default" ? undefined : fixed}
             replyUrl={replyUrl}
-            replyCount={12}
           />
         </div>
 
