@@ -1,5 +1,6 @@
 .claps-root {
   --animate-duration: 600ms;
+  --transition: 120ms;
 
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
@@ -17,6 +18,7 @@
 
 .claps-root * {
   box-sizing: border-box;
+  transition: var(--transition);
 }
 
 .claps-fixed {
@@ -41,6 +43,7 @@
 .claps-body {
   display: flex;
   align-items: center;
+  gap: 1px;
   padding: 2px;
   color: #000;
   background-color: #fff;
@@ -53,10 +56,8 @@
 }
 
 .claps-divider {
-  transition: 120ms;
   display: block;
   width: 1px;
-  margin-left: -1px;
   height: 1.1em;
   background-color: rgb(0 0 0 / 10%);
 }
@@ -64,14 +65,13 @@
 .claps-button {
   cursor: pointer;
   border: 0;
-  padding: 9px 12px;
+  padding: 8px 12px;
   display: flex;
   align-items: center;
   gap: 0.3em;
   font: inherit;
   background-color: transparent;
-  transition: 120ms;
-  border-radius: 10px;
+  border-radius: 6px;
   text-decoration: none;
   color: inherit;
 }
@@ -108,6 +108,62 @@
 
 .claps-button-clap.clapped svg {
   color: rgb(0 0 0 / 100%);
+}
+
+.claps-share-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background-color: rgb(0 0 0 / 60%);
+  display: grid;
+  place-items: center;
+}
+
+.claps-share-content {
+  position: relative;
+  padding: 2rem;
+  background-color: white;
+  filter: drop-shadow(0 4px 8px rgb(0 0 0 / 20%));
+  border-radius: 1rem;
+}
+
+.claps-share-header {
+  display: flex;
+  align-items: center;
+}
+
+.claps-share-header h3 {
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+.claps-share-close {
+  margin-left: auto;
+  opacity: .5;
+}
+
+.claps-share-buttons {
+  margin-top: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.claps-share-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .6rem;
+}
+
+.claps-share-button-icon {
+  padding: .6rem;
+  background-color: rgb(0 0 0 / 6%);
+  border-radius: 100%;
+}
+
+.claps-share-button:hover .claps-share-button-icon {
+  background-color: rgb(0 0 0 / 10%);
 }
 
 /* https://github.com/animate-css/animate.css */
