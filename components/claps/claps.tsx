@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { debounce } from "lodash";
-import cx from "classnames";
+import debounce from "lodash.debounce";
+import cx from "clsx";
 import Icons from "./icons";
 import Share from "./share";
 
