@@ -1,5 +1,10 @@
 # @upstash/claps
 
+> [!NOTE]  
+> **This project is a Community Project.**
+>
+> The project is maintained and supported by the community. Upstash may contribute but does not officially support or assume responsibility for it.
+
 Add a claps button (like medium) to any page for your Next.js apps.
 
 Nothing to maintain, it is completely serverless 💯
