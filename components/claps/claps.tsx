@@ -1,16 +1,11 @@
-import React, { useCallback, useEffect, useState } from "react";
-import debounce from "lodash.debounce";
+import React, { useState } from "react";
 import cx from "clsx";
 import Icons from "./icons";
 import Share from "./share";
+import useClapData from "./hooks/useClapData";
+import useClapSavingAndInteraction from "./hooks/useClapSavingAndInteraction";
 
 const REACTION_DURATION = 600;
-
-enum ReactionClass {
-  default = "",
-  no = "headShake animated",
-  yes = "heartBeat animated",
-}
 
 type IClapsFixedProps = "left" | "center" | "right";
 
@@ -35,63 +30,12 @@ export default function Claps({
   iconReply,
   shareButton = true,
 }: IClapsProps) {
-  const [ready, setReady] = useState<boolean>(false);
+  const { data, setData, ready } = useClapData(apiPath);
+
+  const { onClapSaving, reaction, cacheCount, setCacheCount } =
+    useClapSavingAndInteraction({ apiPath, setData, key });
+
   const [showShare, setShowShare] = useState<boolean>(false);
-  const [reaction, setReaction] = useState<ReactionClass>(
-    ReactionClass.default
-  );
-
-  const [cacheCount, setCacheCount] = useState<number>(0);
-  const [data, setData] = useState<{
-    totalScore: number;
-    userScore: number;
-    totalUsers: number;
-    maxClaps: number;
-  }>({
-    totalScore: 0,
-    userScore: 0,
-    totalUsers: 0,
-    maxClaps: 0,
-  });
-
-  const setReactionAnim = (reaction: ReactionClass) => {
-    setReaction(reaction);
-    return setTimeout(() => {
-      setReaction(ReactionClass.default);
-    }, REACTION_DURATION);
-  };
-
-  const onClapSaving = useCallback(
-    debounce(async (score, data) => {
-      try {
-        if (data.userScore >= data.maxClaps) {
-          return setReactionAnim(ReactionClass.no);
-        }
-
-        const response = await fetch(apiPath, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ score, key }),
-        });
-
-        if (!response.ok) {
-          return setReactionAnim(ReactionClass.no);
-        }
-
-        const newData = await response.json();
-        setData(newData);
-
-        setReactionAnim(ReactionClass.yes);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setCacheCount(0);
-      }
-    }, 1000),
-    []
-  );
 
   const onClap = () => {
     const value = cacheCount === data.maxClaps ? cacheCount : cacheCount + 1;
@@ -99,27 +43,6 @@ export default function Claps({
 
     return onClapSaving(value, data);
   };
-
-  const getData = async () => {
-    try {
-      const response = await fetch(apiPath, {
-        method: "GET",
-      });
-
-      if (!response.ok) return;
-
-      const data = await response.json();
-      setData(data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setReady(true);
-    }
-  };
-
-  useEffect(() => {
-    getData();
-  }, []);
 
   return (
     <div
